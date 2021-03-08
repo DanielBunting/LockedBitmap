@@ -6,6 +6,32 @@ namespace LockedBitmapUtil.Extensions
     public static class TransformExtensions
     {
         /// <summary>
+        /// Creates a new bitmap of the secor specified.
+        /// 
+        /// note: This does not dispose the original locked image - it creates a new one. 
+        /// </summary>
+        /// <param name="source">the source image, we are taking a sector from.</param>
+        /// <param name="xOffset">The x offset of where the sector should be calculated from.</param>
+        /// <param name="yOffset">The y offset of where the sector should be calculated from.</param>
+        /// <param name="width">The width of the cropped output.</param>
+        /// <param name="height">The height of the cropped output.</param>
+        /// <returns>A new currently locked LockedBitmap object, that is constructed of the specified sector.</returns>
+        public static LockedBitmap Crop(this LockedBitmap source, int xOffset, int yOffset, int width, int height)
+        {
+            if (source.Width < xOffset + width || source.Height < yOffset + height)
+                throw new IndexOutOfRangeException("The specified sector exceeds the range of the source.");
+
+            var newImage = new LockedBitmap(new Bitmap(width, height));
+            newImage.LockBits();
+
+            for (int x = 0; x < width; x++)
+                for (int y = 0; y < height; y++)
+                    newImage.SetPixel(x, y, source.GetPixel(x + xOffset, y + yOffset));
+
+            return newImage;
+        }
+
+        /// <summary>
         /// Creates a new bitmap of the size specified.
         /// 
         /// note: This does not dispose the original locked image - it creates a new one. 
