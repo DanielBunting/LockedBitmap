@@ -19,12 +19,10 @@ namespace LockedBitmapUtil
 
         private bool IsDisposed { get; set; }
 
-        public LockedBitmap(Bitmap source, bool locked = false)
+        public LockedBitmap(Bitmap source)
         {
             Source = source;
             IsDisposed = false;
-            if (locked) 
-                LockBits();
         }
 
         /// <summary>
