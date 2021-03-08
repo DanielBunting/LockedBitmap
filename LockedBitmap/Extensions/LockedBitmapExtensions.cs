@@ -1,9 +1,9 @@
 ﻿using System.Drawing;
 using System;
 using System.Collections.Generic;
-using LockedBitmapCore.ColorComparators;
+using LockedBitmapUtil.ColorComparators;
 
-namespace LockedBitmapCore.Extensions
+namespace LockedBitmapUtil.Extensions
 {
     public static class LockedBitmapExtensions
     {

@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace LockedBitmapCore.ColorComparators
+namespace LockedBitmapUtil.ColorComparators
 {
     public class RgbColorComparator : IColorComparator
     {
