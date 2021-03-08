@@ -8,6 +8,7 @@
     <RepositoryUrl>https://github.com/DanielBunting/LockedBitmap</RepositoryUrl>
     <PackageTags>LockedBitmap Fast Image Search</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
