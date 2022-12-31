@@ -49,6 +49,48 @@ namespace LockedBitmapUtil.Extensions
             return false;
         }
 
+        /// <summary>
+        /// A helper function that helps check if one LockedBitmap object, exists within another. 
+        /// </summary>
+        /// <param name="lockedHaystack">The image we are searching in.</param>
+        /// <param name="lockedNeedle">The image we are searching for an occurence of.</param>
+        /// <param name="firstOccurence">a variable that is set if the image is found, or defaults to -1, -1.</param>
+        /// <returns>If the 'needle' was found within the 'haystack'.</returns>
+        public static bool DoesImageExist(this LockedBitmap lockedHaystack, LockedBitmap lockedNeedle, Rectangle searchRectangle, out Point firstOccurence)
+        => DoesImageExist(lockedHaystack, lockedNeedle, searchRectangle, out firstOccurence, new DefaultColorComparator());
+
+        /// <summary>
+        /// A helper function that helps check if one LockedBitmap object, exists within another. 
+        /// </summary>
+        /// <param name="lockedHaystack">The image we are searching in.</param>
+        /// <param name="lockedNeedle">The image we are searching for an occurence of.</param>
+        /// <param name="searchRectangle">The Rectangle within we wish to search</param>
+        /// <param name="colorComparator"> a custom colour comparator, that allows different check types to be implemented.</param>
+        /// <returns>If the 'needle' was found within the 'haystack'.</returns>
+        public static bool DoesImageExist(this LockedBitmap lockedHaystack, LockedBitmap lockedNeedle, Rectangle searchRectangle, out Point firstOccurence, IColorComparator colorComparator)
+        {
+            for (int hayX = searchRectangle.Left; hayX < lockedHaystack.Width || hayX > searchRectangle.Right; hayX++)
+            {
+                for (int hayY = searchRectangle.Top; hayY < lockedHaystack.Height || hayY > searchRectangle.Bottom; hayY++)
+                {
+                    var canBeFound = true;
+
+                    for (int needleX = 0; needleX < lockedNeedle.Width && canBeFound; needleX++)
+                        for (int needleY = 0; needleY < lockedNeedle.Height && canBeFound; needleY++)
+                            canBeFound = colorComparator.IsSame(lockedHaystack.GetPixel(hayX + needleX, hayY + needleY), lockedNeedle.GetPixel(needleX, needleY));
+
+                    if (canBeFound)
+                    {
+                        firstOccurence = new Point(hayX, hayY);
+                        return true;
+                    }
+                }
+            }
+
+            firstOccurence = new Point(-1, -1);
+            return false;
+        }
+
 
         /// <summary>
         /// Gets all occurences of an image occuring.
