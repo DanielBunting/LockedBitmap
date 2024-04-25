@@ -3,8 +3,9 @@ name: Build and Test
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -17,6 +18,31 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.x
+
+    - name: Increment version
+      id: version_bump
+      run: |
+        FILE_PATH='./LockedBitmap/LockedBitmap.csproj'
+        # Use awk to extract the version directly without relying on Perl-compatible regular expressions
+        VERSION=$(awk -F'[<>]' '/<Version>/{print $3}' "$FILE_PATH")
+        IFS='.' read -ra ADDR <<< "$VERSION"
+        ADDR[2]=$((ADDR[2]+1)) # Increment patch version
+        NEW_VERSION="${ADDR[0]}.${ADDR[1]}.${ADDR[2]}"
+        # Use sed to replace the version in the csproj file
+        sed -i "s/<Version>$VERSION<\/Version>/<Version>$NEW_VERSION<\/Version>/" "$FILE_PATH"
+        echo "New version: $NEW_VERSION"
+        echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
+      shell: bash
+
+
+    - name: Commit version bump
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add -u
+        git commit -m "Bump version to $NEW_VERSION"
+        git push
+
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
