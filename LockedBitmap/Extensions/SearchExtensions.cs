@@ -91,6 +91,17 @@ namespace LockedBitmapUtil.Extensions
         /// </summary>
         /// <param name="lockedHaystack">The image we are searching in.</param>
         /// <param name="lockedNeedle">The image we are searching for an occurence of.</param>
+        /// <param name="searchRectangle">The Rectangle within we wish to search</param>
+        /// <param name="colorComparator"> a custom colour comparator, that allows different check types to be implemented.</param>
+        /// <returns>If the 'needle' was found within the 'haystack'.</returns>
+        public static bool DoesImageExist(this LockedBitmap lockedHaystack, LockedBitmap lockedNeedle, Rectangle searchRectangle, IColorComparator colorComparator)
+        => DoesImageExist(lockedHaystack, lockedNeedle, searchRectangle, out _, colorComparator);
+
+        /// <summary>
+        /// A helper function that helps check if one LockedBitmap object, exists within another. 
+        /// </summary>
+        /// <param name="lockedHaystack">The image we are searching in.</param>
+        /// <param name="lockedNeedle">The image we are searching for an occurence of.</param>
         /// <param name="colorComparator"> a custom colour comparator, that allows different check types to be implemented.</param>
         /// <returns>If the 'needle' was found within the 'haystack'.</returns>
         public static bool DoesImageExist(this LockedBitmap lockedHaystack, LockedBitmap lockedNeedle, out Point firstOccurence, IColorComparator colorComparator)
