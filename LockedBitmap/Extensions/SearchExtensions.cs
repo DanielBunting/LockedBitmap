@@ -23,6 +23,74 @@ namespace LockedBitmapUtil.Extensions
         /// </summary>
         /// <param name="lockedHaystack">The image we are searching in.</param>
         /// <param name="lockedNeedle">The image we are searching for an occurence of.</param>
+        /// <param name="searchRectangle">The Rectangle within we wish to search</param>
+        /// <returns>If the 'needle' was found within the 'haystack'.</returns>
+        public static bool DoesImageExist(this LockedBitmap lockedHaystack, LockedBitmap lockedNeedle, Rectangle searchRectangle)
+        => DoesImageExist(lockedHaystack, lockedNeedle, searchRectangle, out Point _, new DefaultColorComparator());
+
+        /// <summary>
+        /// A helper function that helps check if one LockedBitmap object, exists within another. 
+        /// </summary>
+        /// <param name="lockedHaystack">The image we are searching in.</param>
+        /// <param name="lockedNeedle">The image we are searching for an occurence of.</param>
+        /// <param name="inner">The inner point of the search rectangle.</param>
+        /// <param name="outer">The outer point of the search rectangle.</param>
+        /// <param name="colorComparator"> a custom colour comparator, that allows different check types to be implemented.</param>
+        /// <returns>If the 'needle' was found within the 'haystack'.</returns>
+        public static bool DoesImageExist(this LockedBitmap lockedHaystack, LockedBitmap lockedNeedle, Point inner, Point outer, IColorComparator colorComparator)
+        => DoesImageExist(lockedHaystack, lockedNeedle, new Rectangle(inner.X, inner.Y, outer.X - inner.X, outer.Y - inner.Y), out _, colorComparator);
+
+        /// <summary>
+        /// A helper function that helps check if one LockedBitmap object, exists within another. 
+        /// </summary>
+        /// <param name="lockedHaystack">The image we are searching in.</param>
+        /// <param name="lockedNeedle">The image we are searching for an occurence of.</param>
+        /// <param name="inner">The inner point of the search rectangle.</param>
+        /// <param name="outer">The outer point of the search rectangle.</param>
+        /// <returns>If the 'needle' was found within the 'haystack'.</returns>
+        public static bool DoesImageExist(this LockedBitmap lockedHaystack, LockedBitmap lockedNeedle, Point inner, Point outer)
+        => DoesImageExist(lockedHaystack, lockedNeedle, new Rectangle(inner.X, inner.Y, outer.X - inner.X, outer.Y - inner.Y), out _, new DefaultColorComparator());
+
+        /// <summary>
+        /// A helper function that helps check if one LockedBitmap object, exists within another. 
+        /// </summary>
+        /// <param name="lockedHaystack">The image we are searching in.</param>
+        /// <param name="lockedNeedle">The image we are searching for an occurence of.</param>
+        /// <param name="inner">The inner point of the search rectangle.</param>
+        /// <param name="outer">The outer point of the search rectangle.</param>
+        /// <param name="firstOccurence">a variable that is set if the image is found, or defaults to -1, -1.</param>
+        /// <returns>If the 'needle' was found within the 'haystack'.</returns>
+        public static bool DoesImageExist(this LockedBitmap lockedHaystack, LockedBitmap lockedNeedle, Point inner, Point outer, out Point firstOccurence)
+        => DoesImageExist(lockedHaystack, lockedNeedle, new Rectangle(inner.X, inner.Y, outer.X - inner.X, outer.Y - inner.Y), out firstOccurence, new DefaultColorComparator());
+
+        /// <summary>
+        /// A helper function that helps check if one LockedBitmap object, exists within another. 
+        /// </summary>
+        /// <param name="lockedHaystack">The image we are searching in.</param>
+        /// <param name="lockedNeedle">The image we are searching for an occurence of.</param>
+        /// <param name="inner">The inner point of the search rectangle.</param>
+        /// <param name="outer">The outer point of the search rectangle.</param>
+        /// <param name="firstOccurence">a variable that is set if the image is found, or defaults to -1, -1.</param>
+        /// <returns>If the 'needle' was found within the 'haystack'.</returns>
+        public static bool DoesImageExist(this LockedBitmap lockedHaystack, LockedBitmap lockedNeedle, Point inner, Point outer, out Point firstOccurence, IColorComparator colorComparator)
+        => DoesImageExist(lockedHaystack, lockedNeedle, new Rectangle(inner.X, inner.Y, outer.X - inner.X, outer.Y - inner.Y), out firstOccurence, colorComparator);
+
+        /// <summary>
+        /// A helper function that helps check if one LockedBitmap object, exists within another. 
+        /// </summary>
+        /// <param name="lockedHaystack">The image we are searching in.</param>
+        /// <param name="lockedNeedle">The image we are searching for an occurence of.</param>
+        /// <param name="searchRectangle">The Rectangle within we wish to search</param>
+        /// <param name="firstOccurence">a variable that is set if the image is found, or defaults to -1, -1.</param>
+        /// <returns>If the 'needle' was found within the 'haystack'.</returns>
+        public static bool DoesImageExist(this LockedBitmap lockedHaystack, LockedBitmap lockedNeedle, Rectangle searchRectangle, out Point firstOccurence)
+        => DoesImageExist(lockedHaystack, lockedNeedle, searchRectangle, out firstOccurence, new DefaultColorComparator());
+
+        /// <summary>
+        /// A helper function that helps check if one LockedBitmap object, exists within another. 
+        /// </summary>
+        /// <param name="lockedHaystack">The image we are searching in.</param>
+        /// <param name="lockedNeedle">The image we are searching for an occurence of.</param>
         /// <param name="colorComparator"> a custom colour comparator, that allows different check types to be implemented.</param>
         /// <returns>If the 'needle' was found within the 'haystack'.</returns>
         public static bool DoesImageExist(this LockedBitmap lockedHaystack, LockedBitmap lockedNeedle, out Point firstOccurence, IColorComparator colorComparator)
@@ -48,16 +116,6 @@ namespace LockedBitmapUtil.Extensions
             firstOccurence = new Point(-1, -1);
             return false;
         }
-
-        /// <summary>
-        /// A helper function that helps check if one LockedBitmap object, exists within another. 
-        /// </summary>
-        /// <param name="lockedHaystack">The image we are searching in.</param>
-        /// <param name="lockedNeedle">The image we are searching for an occurence of.</param>
-        /// <param name="firstOccurence">a variable that is set if the image is found, or defaults to -1, -1.</param>
-        /// <returns>If the 'needle' was found within the 'haystack'.</returns>
-        public static bool DoesImageExist(this LockedBitmap lockedHaystack, LockedBitmap lockedNeedle, Rectangle searchRectangle, out Point firstOccurence)
-        => DoesImageExist(lockedHaystack, lockedNeedle, searchRectangle, out firstOccurence, new DefaultColorComparator());
 
         /// <summary>
         /// A helper function that helps check if one LockedBitmap object, exists within another. 
